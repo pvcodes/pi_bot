@@ -52,16 +52,6 @@ pipenv install
 - Get the `credentials.json` from &nbsp; `APIs and services -> Credentials` &nbsp; click on CREATE CREDENTIALS and follow required steps
 - Copy and paste `credentials.json` file to [src](/src) folder 
 
-### [Optional] For having music stuff working (make sure you have [JVM](https://www.java.com/en/download/) working), Follow these:
-
-- Run the command `java -jar Lavalink.jar`
-
-
-- Enjoy! (don't forget to add your own bot into your discord server by generating an invite link from the discord developers application page in [OAuth2 section](https://discord.com/developers/applications/) and choose application and check Oauth2 section)
-- You may do bug-reporting or ask for help in on the SupportServer... or just open an issue on this repo.
-
-<b>Note: </b>If you get `module not found error`, try to run `pip install -r requirenment.txt`
-
 ## How to contribute
 
 Before contributing, here is some information that might help your **PR (Pull Request)** get merged.
