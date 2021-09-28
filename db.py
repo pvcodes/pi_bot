@@ -17,7 +17,7 @@ db_connstr = f'mongodb+srv://{DB_UNAME}:{DB_PSWRD}@{DB_CLUSTER}.dshjj.mongodb.ne
 
 try:
     client = MongoClient(db_connstr)
-    db = client['db_pibot']
+    db = client[DB_NAME]
     # print(db)
 except Exception as e:
     db = None
