@@ -98,24 +98,8 @@ async def on_guild_remove(guild):
 
 
 async def changelog():
+    # CHANGELOG FUNCTIONS
 
-    serverData = db.server_config.find({})
-    # print(channelIDS)
-    for i in serverData:
-        print(i["channel_id"])
-        channel = bot.get_channel(int(i["channel_id"]))
-        # print(channel)
-    embed = discord.Embed(title=" π Bot", url="https://github.com/pvcodes/pi_bot",
-                          description="Changelogs of the  π bot")
-    embed.add_field(name="1. Added Database",
-                    value="Now we have a dedicated database for the server configs", inline=False)
-    embed.add_field(name="2. Removed Music Cog",
-                    value="The bot is dedicated for CP, using it for music would not be good ", inline=False)
-    embed.add_field(name="Faced any issue",
-                    value="You many report them [here](https://github.com/pvcodes/pi_bot/issues/new) or leave a message [undefined#1977](https://discord.com/users/441501033294987264)")
-    # embed.set_footer(text=" ")
-    c = bot.get_channel(892306927340638229)
-    await c.send(embed=embed)
 
 
 # On Bot Ready
