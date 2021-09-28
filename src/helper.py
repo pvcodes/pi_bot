@@ -3,6 +3,7 @@ import json
 import random
 import re
 import requests
+from db import db
 
 
 async def _sendEmbed(ctx, embed):
@@ -19,9 +20,13 @@ async def _sendEmbed(ctx, embed):
 
 
 def _getPrefix1(client, message):
-    with open('src/server_config.json', 'r') as f:
-        prefixes = json.load(f)
-    return prefixes[str(message.guild.id)]['prefix']
+    try:
+        obj = db.server_config.find({"guild_id": str(message.guild.id)})
+        print(obj[0])
+        return obj[0]["prefix"]
+    except Exception as e:
+        print(
+            f'--------------------------------------\n{e}\n--------------------------------------')
 
 
 def _textFormatting(text):
@@ -103,21 +108,35 @@ def _getProblem(rating: int, tags: list):
 
 
 def _getPrefix2(ctx):
-    with open('src/server_config.json', 'r') as f:
-        prefixes = json.load(f)
-    return prefixes[str(ctx.guild.id)]['prefix']
+
+    try:
+        obj = db.server_config.find({"guild_id": str(ctx.guild.id)})
+        print(obj[0])
+        return obj[0]["prefix"]
+    except Exception as e:
+        print(
+            f'--------------------------------------\n{e}\n--------------------------------------')
 
 
 def _getChannelId(ctx):
-    with open('src/server_config.json', 'r') as f:
-        prefixes = json.load(f)
-    return prefixes[str(ctx.guild.id)]['channel_id']
+
+    try:
+        obj = db.server_config.find({"guild_id": str(ctx.guild.id)})
+        print(obj[0])
+        return obj[0]["channel_id"]
+    except Exception as e:
+        print(
+            f'--------------------------------------\n{e}\n--------------------------------------')
 
 
 def _getRoleId(ctx):
-    with open('src/server_config.json', 'r') as f:
-        prefixes = json.load(f)
-    return prefixes[str(ctx.guild.id)]['role_id']
+    try:
+        obj = db.server_config.find({"guild_id": str(ctx.guild.id)})
+        print(obj[0])
+        return obj[0]["role_id"]
+    except Exception as e:
+        print(
+            f'--------------------------------------\n{e}\n--------------------------------------')
 
 
 def _isValidPrefix(prefix):
@@ -134,7 +153,6 @@ def _isValidPrefix(prefix):
 def _isValidChannel(ctx, channelid):
     channelid = int(channelid)
     channelid = ctx.bot.get_channel(channelid)
-    print(channelid)
     if channelid != None:
         return True
     return False
@@ -142,7 +160,6 @@ def _isValidChannel(ctx, channelid):
 
 def _isValidRole(ctx, roleid):
     roleid = int(roleid)
-    print(f'insied {roleid}')
     roleid = ctx.guild.get_role(roleid)
 
     if roleid != None:

@@ -3,5 +3,6 @@ templates*
 discord.log
 *.json
 logs
+*.log
 __pycache__
 */__pycache__

@@ -36,7 +36,7 @@ class Codeforces(commands.Cog):
     )
     async def __rating(self, ctx, username: str):
         """For getting the rating of an user"""
-
+        print(f'\n{username}\n')
         data = _isValid(username)
         if data:
             if 'rating' in data['result'][0]:

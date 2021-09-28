@@ -14,12 +14,13 @@ import discord
 import logging
 import os
 import json
+from db import db
 
 # Loading Discord Token
 load_dotenv()
 dc_token = os.getenv("DISCORD_TOKEN")
+# print(f'\n-----------------------------\n{dc_token}\n-----------------------------')
 
-print(f'\n-----------------------------\n{dc_token}\n-----------------------------')
 
 description = '> All in one bot, for now works with Codeforces'
 
@@ -50,27 +51,23 @@ bot = commands.Bot(
 
 @bot.event
 async def on_guild_join(guild):
-
-    with open('src/server_config.json', 'r') as f:
-        data = json.load(f)
-    data[str(guild.id)] = dict([
-        ('prefix', ''),
-        ('channel_id', 0),
-        ('role_id', 0)
-    ])
-
     channel_id = ''
 
     for channel in guild.text_channels:
         if not isinstance(channel, PrivateChannel):
             channel_id = channel.id
 
-    data[str(guild.id)]['prefix'] = '-'
-    data[str(guild.id)]['channel_id'] = f'{channel_id}'
-    data[str(guild.id)]['role_id'] = f'{guild.default_role.id}'
+    guildObj = {
+        "guild_id": f'{guild.id}',
+        "prefix": '-',
+        "channel_id": f'{channel_id}',
+        "role_id": f'{guild.default_role.id}'
+    }
 
-    with open('src/server_config.json', 'w') as f:
-        json.dump(data, f, indent=4)
+    try:
+        db.server_config.insert_one(guildObj)
+    except Exception as e:
+        await guild.get_channel(int(channel_id)).send("** Something went wrong on server side, please kick and add invite the bot again  **")
 
     embed = discord.Embed(
         title="Regards π Bot,", url="https://discord.gg/uGWfQY4dj4",
@@ -90,19 +87,42 @@ async def on_guild_join(guild):
 
 @bot.event
 async def on_guild_remove(guild):
-    with open('src/server_config.json', 'r') as f:
-        data = json.load(f)
+    print(f'deleting {guild.id}')
 
-    data.pop(str(guild.id))
+    try:
+        z = db.server_config.delete_many({"guild_id": f'{guild.id}'})
 
-    with open('src/server_config.json', 'w') as f:
-        json.dump(data, f, indent=4)
+    except Exception as e:
+        print(
+            f'--------------------------------------\n{e}\n--------------------------------------')
+
+
+async def changelog():
+
+    serverData = db.server_config.find({})
+    # print(channelIDS)
+    for i in serverData:
+        print(i["channel_id"])
+        channel = bot.get_channel(int(i["channel_id"]))
+        # print(channel)
+    embed = discord.Embed(title=" π Bot", url="https://github.com/pvcodes/pi_bot",
+                          description="Changelogs of the  π bot")
+    embed.add_field(name="1. Added Database",
+                    value="Now we have a dedicated database for the server configs", inline=False)
+    embed.add_field(name="2. Removed Music Cog",
+                    value="The bot is dedicated for CP, using it for music would not be good ", inline=False)
+    embed.add_field(name="Faced any issue",
+                    value="You many report them [here](https://github.com/pvcodes/pi_bot/issues/new) or leave a message [undefined#1977](https://discord.com/users/441501033294987264)")
+    # embed.set_footer(text=" ")
+    c = bot.get_channel(892306927340638229)
+    await c.send(embed=embed)
 
 
 # On Bot Ready
-@bot.event
+@ bot.event
 async def on_ready():
     print(f'We have logged in as {bot.user}')
+    await changelog()
 
 
 # Background Task
@@ -112,67 +132,12 @@ status = cycle([
 ])
 
 
-@tasks.loop(minutes=30)
+@ tasks.loop(minutes=30)
 async def change_status():
     await bot.change_presence(activity=discord.Game(next(status)))
 
 
-class MusicBot(commands.Bot):
-    def __init__(self):
-        self._cogs = [p.stem for p in Path(".").glob("./cogs/*.py")]
-        super().__init__(command_prefix=self.prefix, case_insensitive=True)
-
-    def setup(self):
-        print("Running setup...")
-
-        for cog in self._cogs:
-            self.load_extension(f"bot.cogs.{cog}")
-            print(f" Loaded `{cog}` cog.")
-
-        print("Setup complete.")
-
-    def run(self):
-        self.setup()
-
-        print("Running bot...")
-        super().run(dc_token, reconnect=True)
-
-    async def shutdown(self):
-        print("Closing connection to Discord...")
-        await super().close()
-
-    async def close(self):
-        print("Closing on keyboard interrupt...")
-        await self.shutdown()
-
-    async def on_connect(self):
-        print(f" Connected to Discord (latency: {self.latency*1000:,.0f} ms).")
-
-    async def on_resumed(self):
-        print("Bot resumed.")
-
-    async def on_disconnect(self):
-        print("Bot disconnected.")
-
-    async def on_ready(self):
-        self.client_id = (await self.application_info()).id
-        print("Bot ready.")
-
-    async def prefix(self, bot, msg):
-        return commands.when_mentioned_or("+")(bot, msg)
-
-    async def process_commands(self, msg):
-        ctx = await self.get_context(msg, cls=commands.Context)
-
-        if ctx.command is not None:
-            await self.invoke(ctx)
-
-    async def on_message(self, msg):
-        if not msg.author.bot:
-            await self.process_commands(msg)
-
-
-@bot.event
+@ bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         emb = discord.Embed(title="What's that?!",
@@ -181,7 +146,7 @@ async def on_command_error(ctx, error):
         await _sendEmbed(ctx, emb)
 
 
-@bot.event
+@ bot.event
 async def on_message(message):
     if message.author == bot.user:
         return
@@ -200,8 +165,8 @@ if os.path.exists('src/contests.json'):
 _getAllContests()
 
 # For Server Config
-if not os.path.exists('src/server_config.json'):
-    f = open("src/server_config.json", "x")
-    f.write('{}')
+# if not os.path.exists('src/server_config.json'):
+#     f = open("src/server_config.json", "x")
+#     f.write('{}')
 
 bot.run(dc_token, bot=True, reconnect=True)

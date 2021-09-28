@@ -1,6 +1,6 @@
 from discord.ext import commands
-import json
-
+# import json
+from db import db
 from src.helper import _isValidPrefix, _isValidChannel, _isValidRole
 
 
@@ -20,13 +20,27 @@ class BotSetup(commands.Cog):
     async def __setprefix(self, ctx, prefix):
         """For setting the bot prefix"""
         if _isValidPrefix(prefix):
-            with open('src/server_config.json', 'r') as f:
-                prefixes = json.load(f)
 
-            prefixes[str(ctx.guild.id)]['prefix'] = prefix
+            try:
+                db.server_config.update(
+                    {"guild_id": str(ctx.guild.id)},
+                    {"$set": {
+                        "prefix": str(prefix)
 
-            with open('src/server_config.json', 'w') as f:
-                json.dump(prefixes, f, indent=4)
+                    }})
+            except Exception as e:
+                print(
+                    f'--------------------------------------\n{e}\n--------------------------------------')
+                await ctx.send('>>> Something went wrong, Try again.')
+                
+            # with open('src/server_config.json', 'r') as f:
+            #     prefixes = json.load(f)
+
+            # prefixes[str(ctx.guild.id)]['prefix'] = prefix
+
+            # with open('src/server_config.json', 'w') as f:
+            #     json.dump(prefixes, f, indent=4)
+
             await ctx.send(f'prefix changed to: {prefix}')
         else:
             await ctx.send('>>> Prefix can be only a symbol, Try again.')
@@ -39,13 +53,27 @@ class BotSetup(commands.Cog):
         channel = channel[2:-1]
         print(channel)
         if _isValidChannel(ctx, channel):
-            with open('src/server_config.json', 'r') as f:
-                prefixes = json.load(f)
 
-            prefixes[str(ctx.guild.id)]['channel_id'] = channel
+            # with open('src/server_config.json', 'r') as f:
+            #     prefixes = json.load(f)
 
-            with open('src/server_config.json', 'w') as f:
-                json.dump(prefixes, f, indent=4)
+            # prefixes[str(ctx.guild.id)]['channel_id'] = channel
+
+            # with open('src/server_config.json', 'w') as f:
+            #     json.dump(prefixes, f, indent=4)
+            try:
+                db.server_config.update(
+                    {"guild_id": str(ctx.guild.id)},
+                    {"$set": {
+                        "channel_id": str(channel)
+
+                    }})
+            except Exception as e:
+                print(
+                    f'--------------------------------------\n{e}\n--------------------------------------')
+                await ctx.send('>>> Something went wrong, Try again.')
+
+    
 
             await ctx.send(f'Default ping channel changed to: <#{channel}>')
         else:
@@ -58,14 +86,27 @@ class BotSetup(commands.Cog):
         roleid = roleid[3:-1]
         print(roleid)
         if _isValidRole(ctx, roleid):
-            print(roleid)
-            with open('src/server_config.json', 'r') as f:
-                prefixes = json.load(f)
+            # print(roleid)
+            # with open('src/server_config.json', 'r') as f:
+            #     prefixes = json.load(f)
 
-            prefixes[str(ctx.guild.id)]['role_id'] = roleid
+            # prefixes[str(ctx.guild.id)]['role_id'] = roleid
 
-            with open('src/server_config.json', 'w') as f:
-                json.dump(prefixes, f, indent=4)
+            # with open('src/server_config.json', 'w') as f:
+            #     json.dump(prefixes, f, indent=4)
+
+            try:
+                db.server_config.update(
+                    {"guild_id": str(ctx.guild.id)},
+                    {"$set": {
+                        "role_id": str(roleid)
+
+                    }})
+            except Exception as e:
+                print(
+                    f'--------------------------------------\n{e}\n--------------------------------------')
+                await ctx.send('>>> Something went wrong, Try again.')
+
 
             await ctx.send(f'Default ping role changed to: <@&{roleid}>')
         else:

@@ -21,7 +21,11 @@ To test the bot join the [Support Server](https://discord.gg/FjVVkTtbgp). And he
 
 ## Hosting the bot locally:
 
-**NOTE**: To replicate this bot, you will need a bot **token**. Go get yours at https://discord.com/developers/ (If you need help with this step, feel free to ask for help in our [Support Server](https://discord.gg/FjVVkTtbgp)
+**NOTE**: To replicate this bot, you will need a bot **token**. Go get yours at https://discord.com/developers/ (If you need help with this step, feel free to ask for help in our [Support Server](https://discord.gg/FjVVkTtbgp).
+
+### For Database, It is implemented on [MongoDB](https://www.mongodb.com/), created a *cluster* and a collection named `server_config`
+
+
 
 - Clone this repo using `git clone`
 - cd into the bot folder.
@@ -29,9 +33,14 @@ To test the bot join the [Support Server](https://discord.gg/FjVVkTtbgp). And he
 
 ```text
 DISCORD_TOKEN=<your token>
+DB_CLUSTER=<cluster name>
+DB_NAME=<db name>
+DB_UNAME=<user who has access to db's username>
+DB_PSWRD=<DB_UNAME's password>
+
 ```
 
-- Install the `pipenv` via `pip install pipenv` and then run:
+- Install the `pipenv` via `pip install pipenv` an d then run:
 
 ```
 pipenv install
