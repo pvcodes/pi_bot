@@ -97,16 +97,16 @@ async def on_guild_remove(guild):
             f'--------------------------------------\n{e}\n--------------------------------------')
 
 
-async def changelog():
+# async def changelog():
     # CHANGELOG FUNCTIONS
+    # await x
+    # On Bot Ready
 
 
-
-# On Bot Ready
-@ bot.event
+@bot.event
 async def on_ready():
     print(f'We have logged in as {bot.user}')
-    await changelog()
+    # await changelog()
 
 
 # Background Task
