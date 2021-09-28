@@ -1,4 +1,4 @@
-<h1 align=center> Pi Bot - α</h1>
+<h1 align=center> Pi Bot - β</h1>
 <p>
 Welcome to π bot, it is the will be an all-purpose bot for competative programming, github and other stuff.
 
