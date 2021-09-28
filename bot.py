@@ -18,6 +18,9 @@ import json
 # Loading Discord Token
 load_dotenv()
 dc_token = os.getenv("DISCORD_TOKEN")
+
+print(f'\n-----------------------------\n{dc_token}\n-----------------------------')
+
 description = '> All in one bot, for now works with Codeforces'
 
 # Logging Stuff

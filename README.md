@@ -28,7 +28,7 @@ To test the bot join the [Support Server](https://discord.gg/FjVVkTtbgp). And he
 - Add the token in a `.env` file in the project root as follows:
 
 ```text
-DISCORD_BOT_TOKEN=<your token>
+DISCORD_TOKEN=<your token>
 ```
 
 - Install the `pipenv` via `pip install pipenv` and then run:

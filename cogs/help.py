@@ -61,7 +61,7 @@ class Help(commands.Cog):
             # setting information about author
             emb.add_field(
                 name="About",
-                value=f"The Bots is developed and currently maintained by [{owner_name}](https://pvcodes.netlify.app), based on discord.py.\
+                value=f"The Bots is developed and currently maintained by [{owner_name}](https://pvcodes.in), based on discord.py.\
                         Please visit https://github.com/pvcodes/pi_bot to submit ideas or bugs.",
                 inline=False
 

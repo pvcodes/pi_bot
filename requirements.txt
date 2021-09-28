@@ -1,10 +1,9 @@
-wavelink
 six
 google_auth_oauthlib
 discord.py
 requests
 discord
 google_api_python_client
-protobuf
+protobufc
 python-dotenv
 python_dateutil
